@@ -4,9 +4,12 @@ import (
 	"log"
 	"net/http"
   "notes-api/handlers"
+	"notes-api/storage"
 )
 
 func main() {
+	storage.EnsureJSONFileExists("data/data.json")
+
 	http.HandleFunc("/notes", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost { // Check for POST method
 			handlers.CreateNote(w, r)
