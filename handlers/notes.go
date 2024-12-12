@@ -42,20 +42,46 @@ func CreateNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Create Note ", note.ID)
-	storage.CreateNote("data/data.json", models.Note{ID: "", Title: "Title 1", Content: "Content", CreatedAt: "", Author: "Author"})
-
-	// err = json.NewEncoder(w).Encode(response)
-	// if err != nil {
-	// 	// Если произошла ошибка при кодировании JSON
-	// 	http.Error(w, "Error encoding response", http.StatusInternalServerError)
-	// }
+	storage.CreateNote("data/data.json", note)
 }
 
 func GetAllNotes(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get All Notes")
-	storage.LoadNotes("data/data.json")
+	notes, err := storage.LoadNotes("data/data.json")
+	if err != nil {
+		http.Error(w, "Error loading notes", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if err := json.NewEncoder(w).Encode(notes); err != nil {
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+	}
+
 }
 
+func GetNoteByID(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Get Note By ID")
+
+}
+
+
+// GET /notes
+
+// Retrieve all notes.
+// GET /notes/{id}
+
+// Retrieve a specific note by its ID.
+// POST /notes
+
+// Create a new note.
+// PUT /notes/{id}
+
+// Update an existing note.
+// DELETE /notes/{id}
+
+// Delete a note by its ID.
 // ID string `json:"id"`
 // Title string `json:"title"`
 // Content string `json:"content"`
