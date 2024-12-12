@@ -64,6 +64,38 @@ func GetAllNotes(w http.ResponseWriter, r *http.Request) {
 func GetNoteByID(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get Note By ID")
 
+	idStr := r.URL.Path[len("/notes/"):]
+
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		http.Error(w, "Invalid note ID", http.StatusBadRequest)
+		return
+	}
+
+	notes, err := storage.LoadNotes("data/data.json")
+	if err != nil {
+		http.Error(w, "Error loading notes", http.StatusInternalServerError)
+		return
+	}
+
+	var note models.Note
+	for _, n := range notes {
+		if n.ID == id.String() {
+			note = n
+			break
+		}
+	}
+
+	if note.ID == "" {
+		http.Error(w, "Note not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if err := json.NewEncoder(w).Encode(note); err != nil {
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+	}
 }
 
 

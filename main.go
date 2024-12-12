@@ -20,6 +20,8 @@ func main() {
 		}
 	})
 
+	http.HandleFunc("/notes/", handlers.GetNoteByID)
+
 	log.Println("Server started on: http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
