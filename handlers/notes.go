@@ -149,13 +149,6 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Println("note:", note)
-
-	// var updatedFields struct {
-	// 	Title   string `json:"title"`
-	// 	Content string `json:"content"`
-	// 	Author  string `json:"author"`
-	// }
-
 	fmt.Println("beforeRequest", r.Body, updatedFields)
 
 
@@ -171,7 +164,7 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("updatedFields::", updatedFields, note)
 
-
+	notes = append(notes, note)
 	if err := storage.SaveNotes("data/data.json", notes); err != nil {
 		fmt.Println("Error saving notes")
 		http.Error(w, "Error saving notes", http.StatusInternalServerError)

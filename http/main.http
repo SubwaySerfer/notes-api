@@ -15,7 +15,7 @@ PUT http://localhost:8080/notes/{{note_id}}
 Content-Type: application/json
 
 {
-  "title": "Updated Title 3",
+  "title": "Updated Title 33441",
   "content": "Updated Content 1",
   "author": "New Author"
 }
