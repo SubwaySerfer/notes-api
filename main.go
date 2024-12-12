@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"notes-api/handlers"
 	"notes-api/storage"
-	_"github.com/swaggo/files"
-	_"notes-api/docs"
+
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/files"
+	"github.com/gin-gonic/gin"
 )
 
 // @title Notes API
@@ -25,15 +27,12 @@ import (
 func main() {
 	storage.EnsureJSONFileExists("data/data.json")
 
-	// Swagger UI at /swagger
-	http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("./swagger"))))	 // @Summary Create a new note
-    // @Description Create a new note with provided details
-    // @Accept  json
-    // @Produce  json
-    // @Param note body handlers.Note true "Note to be created"
-    // @Success 201 {object} handlers.Note
-    // @Failure 400 {string} string "Invalid input"
-    // @Router /notes [post]
+	r := gin.Default()
+
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
+
 	http.HandleFunc("/notes", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost { // Check for POST method
 			handlers.CreateNote(w, r)
