@@ -1,1 +1,5 @@
 POST http://localhost:8080/notes
+
+
+### GET all
+GET http://localhost:8080/notes

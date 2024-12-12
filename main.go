@@ -13,6 +13,8 @@ func main() {
 	http.HandleFunc("/notes", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost { // Check for POST method
 			handlers.CreateNote(w, r)
+		} else if r.Method == http.MethodGet { // Check for GET method
+			handlers.GetAllNotes(w, r)
 		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}

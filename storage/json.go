@@ -2,11 +2,9 @@ package storage
 
 import (
 	"encoding/json"
-	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
 	"os"
-	"time"
 
 	"notes-api/models"
 )
@@ -51,8 +49,6 @@ func CreateNote(filename string, newNote models.Note) error {
 		return err
 	}
 
-	newNote.ID = uuid.New().String()
-	newNote.CreatedAt = time.Now().Format(time.RFC3339)
 	notes = append(notes, newNote)
 
 	return SaveNotes(filename, notes)
