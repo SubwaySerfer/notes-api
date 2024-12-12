@@ -47,6 +47,8 @@ func main() {
         handlers.GetNoteByID(w, r)
     case http.MethodPut:
         handlers.UpdateNoteByID(w, r)
+		case http.MethodDelete:
+				handlers.DeleteNoteByID(w, r)
     default:
         http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
     }

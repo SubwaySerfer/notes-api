@@ -148,9 +148,6 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Note not found", http.StatusNotFound)
 		return
 	}
-	fmt.Println("note:", note)
-	fmt.Println("beforeRequest", r.Body, updatedFields)
-
 
 	if updatedFields.Title != "" {
 		note.Title = updatedFields.Title
@@ -161,8 +158,6 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 	if updatedFields.Author != "" {
 		note.Author = updatedFields.Author
 	}
-
-	fmt.Println("updatedFields::", updatedFields, note)
 
 	notes = append(notes, note)
 	if err := storage.SaveNotes("data/data.json", notes); err != nil {
@@ -177,24 +172,44 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func DeleteNoteByID(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Delete Note By ID")
+	idStr := r.URL.Path[len("/notes/"):]
 
-// GET /notes
+	id, err := uuid.Parse(idStr)
+	if err != nil {
+		http.Error(w, "Invalid note ID", http.StatusBadRequest)
+		return
+	}
 
-// Retrieve all notes.
-// GET /notes/{id}
+	notes, err := storage.LoadNotes("data/data.json")
+	if err != nil {
+		http.Error(w, "Error loading notes", http.StatusInternalServerError)
+		return
+	}
 
-// Retrieve a specific note by its ID.
-// POST /notes
+	var note models.Note
+	for i, n := range notes {
+		if n.ID == id.String() {
+			note = n
+			notes = append(notes[:i], notes[i+1:]...)
+			break
+		}
+	}
 
-// Create a new note.
-// PUT /notes/{id}
+	if note.ID == "" {
+		http.Error(w, "Note not found", http.StatusNotFound)
+		return
+	}
 
-// Update an existing note.
-// DELETE /notes/{id}
+	if err := storage.SaveNotes("data/data.json", notes); err != nil {
+		http.Error(w, "Error saving notes", http.StatusInternalServerError)
+		return
+	}
 
-// Delete a note by its ID.
-// ID string `json:"id"`
-// Title string `json:"title"`
-// Content string `json:"content"`
-// CreatedAt string `json:"created_at"`
-// Author string `json:"author"`
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(note); err != nil {
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+	}
+}
+
