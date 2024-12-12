@@ -5,10 +5,6 @@ import (
 	"net/http"
 	"notes-api/handlers"
 	"notes-api/storage"
-
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/files"
-	"github.com/gin-gonic/gin"
 )
 
 // @title Notes API
@@ -27,12 +23,6 @@ import (
 func main() {
 	storage.EnsureJSONFileExists("data/data.json")
 
-	r := gin.Default()
-
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-
-
 	http.HandleFunc("/notes", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodPost { // Check for POST method
 			handlers.CreateNote(w, r)
@@ -50,7 +40,18 @@ func main() {
     // @Success 200 {object} handlers.Note
     // @Failure 404 {string} string "Note not found"
     // @Router /notes/{id} [get]
-	http.HandleFunc("/notes/", handlers.GetNoteByID)
+
+	http.HandleFunc("/notes/", func(w http.ResponseWriter, r *http.Request) {
+    switch r.Method {
+    case http.MethodGet:
+        handlers.GetNoteByID(w, r)
+    case http.MethodPut:
+        handlers.UpdateNoteByID(w, r)
+    default:
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+    }
+})
+
 
 	log.Println("Server started on: http://localhost:8080")
 	err := http.ListenAndServe(":8080", nil)

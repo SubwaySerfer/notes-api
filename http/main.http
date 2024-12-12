@@ -1,3 +1,5 @@
+@note_id = 967640b2-0984-4d28-94b3-e410cd69f320
+
 ### Create Note
 POST http://localhost:8080/notes
 
@@ -6,4 +8,14 @@ POST http://localhost:8080/notes
 GET http://localhost:8080/notes
 
 ### GET Note by id
-GET http://localhost:8080/notes/ce16321a-b8d4-4979-8cee-c7a2b34eefb1
+GET http://localhost:8080/notes/{{note_id}}
+
+### Update Note by id
+PUT http://localhost:8080/notes/{{note_id}}
+Content-Type: application/json
+
+{
+  "title": "Updated Title 3",
+  "content": "Updated Content 1",
+  "author": "New Author"
+}
