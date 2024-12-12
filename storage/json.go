@@ -1,21 +1,15 @@
 package storage
 
 import (
-	"os"
-	"io/ioutil"
-	"log"
 	"encoding/json"
 	"github.com/google/uuid"
+	"io/ioutil"
+	"log"
+	"os"
 	"time"
-)
 
-type Note struct {
-	ID string `json:"id"`
-	Title string `json:"title"`
-	Content string `json:"content"`
-	CreatedAt string `json:"created_at"`
-	Author string `json:"author"`
-}
+	"notes-api/models"
+)
 
 func EnsureJSONFileExists(filename string) {
 	_, err := os.Stat(filename)
@@ -27,22 +21,22 @@ func EnsureJSONFileExists(filename string) {
 	}
 }
 
-func LoadNotes(filename string) ([]Note, error) {
+func LoadNotes(filename string) ([]models.Note, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	var notes []Note
+	var notes []models.Note
 	err = json.Unmarshal(data, &notes)
-	if  err != nil {
+	if err != nil {
 		return nil, err
 	}
 
 	return notes, nil
 }
 
-func SaveNotes(filename string, notes []Note) error {
+func SaveNotes(filename string, notes []models.Note) error {
 	data, err := json.Marshal(notes)
 	if err != nil {
 		return err
@@ -51,7 +45,7 @@ func SaveNotes(filename string, notes []Note) error {
 	return ioutil.WriteFile(filename, data, 0644)
 }
 
-func CreateNote(filename string, newNote Note) error  {
+func CreateNote(filename string, newNote models.Note) error {
 	notes, err := LoadNotes(filename)
 	if err != nil {
 		return err
