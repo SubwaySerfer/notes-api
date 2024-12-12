@@ -1,0 +1,13 @@
+basePath: /
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API for managing notes
+  termsOfService: http://swagger.io/terms/
+  title: Notes API
+  version: "1.0"
+paths: {}
+swagger: "2.0"
