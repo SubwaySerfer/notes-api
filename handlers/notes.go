@@ -7,7 +7,7 @@ import (
 	"notes-api/models"
 	"notes-api/storage"
 	"time"
-	"io/ioutil"
+	"os"
 
 	"github.com/google/uuid"
 )
@@ -115,7 +115,7 @@ func UpdateNoteByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := os.ReadFile(r.Body)
 	if err != nil {
 		http.Error(w, "Failed to read body", http.StatusInternalServerError)
 		return

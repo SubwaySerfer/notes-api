@@ -2,7 +2,6 @@ package storage
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -12,7 +11,7 @@ import (
 func EnsureJSONFileExists(filename string) {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
-		err = ioutil.WriteFile(filename, []byte("[]"), 0644)
+		err = os.WriteFile(filename, []byte("[]"), 0644)
 		if err != nil {
 			log.Fatalf("Failed to create data file: %v", err)
 		}
@@ -20,7 +19,7 @@ func EnsureJSONFileExists(filename string) {
 }
 
 func LoadNotes(filename string) ([]models.Note, error) {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +39,7 @@ func SaveNotes(filename string, notes []models.Note) error {
 		return err
 	}
 
-	return ioutil.WriteFile(filename, data, 0644)
+	return os.WriteFile(filename, data, 0644)
 }
 
 func CreateNote(filename string, newNote models.Note) error {
