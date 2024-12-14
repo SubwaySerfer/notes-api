@@ -1,9 +1,9 @@
 # Project Improvement Tasks
 
 ## 1. Integrate SQLite Instead of JSON Files
-- Set up a connection to SQLite.
-- Create a `notes` table to store note data.
-- Implement CRUD operations to work with SQLite.
+- +Set up a connection to SQLite.
+- +Create a `notes` table to store note data.
+- +Implement CRUD operations to work with SQLite.
 
 ## 2. Refactor Project Structure
 - Separate project layers:
@@ -12,8 +12,8 @@
   - **Handlers (handlers)**: Handles HTTP requests.
 
 ## 3. Use `gorilla/mux` for Routing
-- Integrate the `gorilla/mux` router.
-- Add routes with parameters (e.g., `/notes/{id}`).
+- +Integrate the `gorilla/mux` router.
+- +Add routes with parameters (e.g., `/notes/{id}`).
 
 ## 4. Add Authentication and Authorization
 - Implement user registration and login.
