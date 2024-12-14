@@ -3,6 +3,11 @@
 ### Create Note
 POST http://localhost:8080/notes
 
+{
+    "title": "My First Note",
+    "content": "This is the content of the first note.",
+    "author": "John Doe"
+}
 
 ### GET all
 GET http://localhost:8080/notes

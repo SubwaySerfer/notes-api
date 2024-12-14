@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	_ "fmt"
-	_ "net/http"
+	"net/http"
 	"notes-api/handlers"
 	"notes-api/storage"
 	_ "notes-api/db"
@@ -42,6 +42,8 @@ func main() {
 
 
 	// err := http.ListenAndServe(":8080", nil)
+	log.Println("Server is running on http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
 	if err != nil {
 		log.Fatal("Failed to start server: %v", err)
 	}
