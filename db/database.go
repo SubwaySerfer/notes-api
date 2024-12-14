@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"notes-api/models"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -32,4 +34,11 @@ func ConnectDB(dbPath string) (*Database, error) {
 	}
 
 	return &Database{Conn: conn}, nil
+}
+
+func (d *Database) CreateUser(user models.User) error {
+	if err := d.Conn.Create(&user).Error; err != nil {
+		return err
+	}
+	return nil
 }

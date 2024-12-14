@@ -6,7 +6,7 @@ POST http://localhost:8080/notes
 {
     "title": "My First Note",
     "content": "This is the content of the first note.",
-    "author": "John Doe"
+    "UserID": "John Doe"
 }
 
 ### GET all
@@ -22,7 +22,7 @@ Content-Type: application/json
 {
   "title": "Updated Title 331141",
   "content": "Updated Content 12",
-  "author": "New Author"
+  "UserID": "New Author"
 }
 
 ### Delete Note by id

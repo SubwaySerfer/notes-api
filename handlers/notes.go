@@ -12,6 +12,25 @@ import (
 	"gorm.io/gorm"
 )
 
+type Database struct {
+	Conn *gorm.DB
+}
+
+func (d *Database) CreateNoteForUser(note models.Note, userID string) error {
+	// Ensure the user exists
+	var user models.User
+	if err := d.Conn.First(&user, userID).Error; err != nil {
+		return err
+	}
+
+	// Assign UserID to the note and create it
+	note.UserID = userID
+	if err := d.Conn.Create(&note).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 // CreateNote creates a new note in the database
 func CreateNote(db *gorm.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +46,7 @@ func CreateNote(db *gorm.DB) http.HandlerFunc {
 			Title:     input.Title,
 			Content:   input.Content,
 			CreatedAt: time.Now(),
-			Author:    input.Author,
+			UserID:    input.UserID,
 		}
 
 		if err := db.Create(&note).Error; err != nil {
@@ -88,7 +107,7 @@ func UpdateNoteByID(db *gorm.DB) http.HandlerFunc {
 		var updatedFields struct {
 			Title   string `json:"title"`
 			Content string `json:"content"`
-			Author  string `json:"author"`
+			UserID    string    `gorm:"type:uuid;"`
 		}
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -108,8 +127,8 @@ func UpdateNoteByID(db *gorm.DB) http.HandlerFunc {
 		if updatedFields.Content != "" {
 			note.Content = updatedFields.Content
 		}
-		if updatedFields.Author != "" {
-			note.Author = updatedFields.Author
+		if updatedFields.UserID != "" {
+			note.UserID = updatedFields.UserID
 		}
 
 		if err := db.Save(&note).Error; err != nil {

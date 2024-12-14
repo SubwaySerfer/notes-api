@@ -20,14 +20,15 @@ func EnsureDBExists(dbPath string) (*Database, error) {
 		return nil, err
 	}
 
-	// Migrate the schema for the "Note" model
-	err = db.AutoMigrate(&models.Note{})
+	// Migrate schemas for both models
+	err = db.AutoMigrate(&models.User{}, &models.Note{})
 	if err != nil {
 		return nil, err
 	}
 
 	return &Database{Conn: db}, nil
 }
+
 
 // CreateNote adds a new note to the database
 func (d *Database) CreateNote(note models.Note) error {
@@ -38,9 +39,9 @@ func (d *Database) CreateNote(note models.Note) error {
 }
 
 // LoadNotes fetches all notes from the database
-func (d *Database) LoadNotes() ([]models.Note, error) {
+func (d *Database) LoadNotesByUser(userID uint) ([]models.Note, error) {
 	var notes []models.Note
-	if err := d.Conn.Find(&notes).Error; err != nil {
+	if err := d.Conn.Where("user_id = ?", userID).Find(&notes).Error; err != nil {
 		return nil, err
 	}
 	return notes, nil
