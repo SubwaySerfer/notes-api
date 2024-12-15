@@ -3,8 +3,7 @@ package auth
 import (
 	"errors"
 	"time"
-
-	"notes-api/security" // Импортируем пакет security
+	
 	"github.com/golang-jwt/jwt/v5" // JWT библиотека
 )
 
@@ -52,8 +51,8 @@ func ValidateJWT(tokenString string) (map[string]interface{}, error) {
 
 // RegisterUser регистрирует нового пользователя
 func RegisterUser(username, password string) (*AuthenticatedUser, error) {
-	// Хэшируем пароль с использованием security.HashPassword
-	hashedPassword, err := security.HashPassword(password)
+	// Хэшируем пароль с использованием HashPassword
+	hashedPassword, err := HashPassword(password)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +78,8 @@ func LoginUser(username, password string) (*AuthenticatedUser, error) {
 	// Здесь получите хэш пароля из базы данных (пример)
 	storedHashedPassword := "$2b$10$..." // Замените на реальный хэш из базы данных
 
-	// Проверяем пароль с использованием security.VerifyPassword
-	if !security.VerifyPassword(password, storedHashedPassword) {
+	// Проверяем пароль с использованием VerifyPassword
+	if !VerifyPassword(password, storedHashedPassword) {
 		return nil, errors.New("invalid username or password")
 	}
 
