@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// Database struct with GORM connection
 type Database struct {
 	Conn *gorm.DB
 }

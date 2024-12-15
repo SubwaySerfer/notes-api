@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -18,4 +20,8 @@ type Note struct {
 	Content   string    `gorm:"type:text;not null" json:"content"`
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
 	UserID    string    `gorm:"type:uuid;"`
+}
+
+type Database struct {
+	Conn *gorm.DB
 }
